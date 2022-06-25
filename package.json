@@ -4,19 +4,47 @@
   "description": "Node app that consumes the Hacker News API and does some cool things on the side",
   "main": "app.js",
   "scripts": {
-    "test": "nyc mocha test/*.js"
+    "test": "nyc mocha test/*.js",
+    "coverage": "nyc report --reporter=json",
+    "lint": "eslint *.js test/*.js --fix",
+    "start": "node app.js",
+    "start-dev": "DEBUG=api* node app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/JohnAdamsy/hacker-news-app.git"
   },
   "keywords": [
-    "hn", "node", "backend", "fun"
+    "hn",
+    "node",
+    "backend",
+    "fun"
   ],
   "author": "John Adamsy",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/JohnAdamsy/hacker-news-app/issues"
   },
-  "homepage": "https://github.com/JohnAdamsy/hacker-news-app#readme"
+  "homepage": "https://github.com/JohnAdamsy/hacker-news-app#readme",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.18.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.3",
+    "eslint-plugin-promise": "^6.0.0",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "koa": "^2.13.4",
+    "koa-body": "^5.0.0"
+  }
 }
