@@ -1,0 +1,22 @@
+{
+  "name": "hacker-news-app",
+  "version": "1.0.0",
+  "description": "Node app that consumes the Hacker News API and does some cool things on the side",
+  "main": "app.js",
+  "scripts": {
+    "test": "nyc mocha test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/JohnAdamsy/hacker-news-app.git"
+  },
+  "keywords": [
+    "hn", "node", "backend", "fun"
+  ],
+  "author": "John Adamsy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohnAdamsy/hacker-news-app/issues"
+  },
+  "homepage": "https://github.com/JohnAdamsy/hacker-news-app#readme"
+}
