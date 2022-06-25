@@ -1,14 +1,14 @@
 {
   "name": "hacker-news-app",
-  "version": "1.0.0",
-  "description": "Node app that consumes the Hacker News API and does some cool things on the side",
+  "version": "1.0.1",
+  "description": "Node app (based on Koajs) that consumes the Hacker News API and does some cool things on the side",
   "main": "app.js",
   "scripts": {
     "test": "nyc mocha test/*.js",
     "coverage": "nyc report --reporter=json",
     "lint": "eslint *.js test/*.js --fix",
     "start": "node app.js",
-    "start-dev": "DEBUG=api* node app.js"
+    "start-dev": "DEBUG=api* nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -16,9 +16,13 @@
   },
   "keywords": [
     "hn",
+    "hacker news",
+    "hacker news api",
     "node",
     "backend",
-    "fun"
+    "fun",
+    "koa",
+    "koajs"
   ],
   "author": "John Adamsy",
   "license": "ISC",
@@ -44,7 +48,11 @@
     }
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "fetch": "^1.1.0",
     "koa": "^2.13.4",
-    "koa-body": "^5.0.0"
+    "koa-body": "^5.0.0",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^10.1.1"
   }
 }

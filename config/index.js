@@ -25,7 +25,8 @@ let config = {
     HOST: HOST,
 
     TIME_ZONE: 'Africa/Nairobi',
-    OK_STATUS: [200,201,202,204,208]
+    OK_STATUS: [200,201,202,204,208],
+    HACKER_NEWS_API: `https://hacker-news.firebaseio.com/v0`
 };
 
 module.exports = config;
