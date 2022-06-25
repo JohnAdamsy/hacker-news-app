@@ -41,7 +41,7 @@ exports.topTenWordsOccurringFromLastTwentyFiveStories = async function topTenWor
             
 
             ctx.status = 200;
-            ctx.body = topTenWords(wordCount);
+            ctx.body = {data: topTenWords(wordCount)};
         
 
     }catch(ex){
