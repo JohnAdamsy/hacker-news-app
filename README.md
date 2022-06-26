@@ -38,17 +38,18 @@ GET http://localhost:6500/words/occurrences
 ```json
 {
     "data": {
-        "to": 7,
-        "a": 7,
-        "on": 6,
-        "the": 4,
-        "from": 3,
-        "crisis": 3,
-        "in": 3,
+        "to": 6,
+        "the": 5,
+        "s": 4,
+        "hn": 4,
+        "for": 3,
         "of": 3,
-        "hn:": 3,
-        "how": 3
-    }
+        "on": 3,
+        "in": 3,
+        "and": 2,
+        "it": 2
+    },
+    "title": "Top 10 words from the last 25 stories"
 }
 ```
 
