@@ -1,4 +1,5 @@
-# Hacker News APP
+# Hacker News App
+This is a Node Server side app that consumes the Hacker News API to do some basic word analysis.
 
 ## Dev Dependencies
 1. commitizen - for standardised git commit messages
@@ -27,9 +28,9 @@ npm start
 npm run start-dev
 ```
 
-### Completed Task
-1. Top 10 most occurring words in the titles of the last 25 stories
-Endpoint
+### APIs
+#### 1. Top 10 most occurring words in the titles of the last 25 stories
+Endpoint:
 ```
 GET http://localhost:6500/words/occurrences
 ```
@@ -56,6 +57,10 @@ GET http://localhost:6500/words/occurrences
 GET http://localhost:6500/words/occurrences?topWordsCount=5&lastStoryCount=50
 ```
 
+### Challenges
+1. Task 2: The Hacker News API for recent stories **/newstories** returns **null** when filtering with the range startAt and endAt. As a worker around, decided to fetch all stories (best, top, new, ask, show, job) get details and filter by the time it was created. 
+2. Task 3: The Hacker News API has a limit of 500 items per result. As a worker around, decided to fetch all stories (best, top, new, ask, show, job) sort the index in reverse order and pick the first 600 then process from there. 
+
 ## To Do
 1. Add Tests
 2. Docker support
@@ -64,5 +69,5 @@ GET http://localhost:6500/words/occurrences?topWordsCount=5&lastStoryCount=50
 ## Hacker News API
 1. Retrieving last N stories 
 ```code
-GET https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty&limitToLast=N&orderBy="$priority"
+GET https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty&limitToLast=N&orderBy="$key"
 ```

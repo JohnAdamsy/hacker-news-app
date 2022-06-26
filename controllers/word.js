@@ -75,6 +75,83 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
     }
 }
 
+/**
+ * Returns the top {number} words occurring in the titles of Hacker News' title from posts made exactly last week. 
+ *  Has optional request query params: 
+ *  1. topWordsCount - number of top most occurring words words. Default is 10
+ *
+ * @desc Returns the top {number} words occurring in the titles of Hacker News' title from posts made exactly last week.
+ *
+ * @param {*} ctx
+ * @param {*} next
+ */
+ exports.topWordsOccurringFromLastStoriesOfLastWeek = async function topWordsOccurringFromLastStoriesOfLastWeek(ctx, next) {
+    const ACTION = `VIEW_TOP_WORDS_FROM_PAST_WEEK_STORIES`;
+
+    try{
+            let query = {
+                wordCount: ctx.query.topWordsCount || 10
+            }
+
+            const requestParamSchema = Joi.object({
+                wordCount: Joi.number().min(1).optional(),
+            });
+
+            await requestParamSchema.validateAsync(query, { warnings: true })
+            .then(validated => {
+                query = validated.value;
+                return true
+            }).catch(err => {
+                err.type = ACTION;
+                err.status = 400;
+                throw (err);
+            });
+
+            let words = [];
+            let wordCountDictionary = {};
+            let response = {data: null};
+            const getPosts =  ['newstories','beststories','topstories','askstories','showstories','jobstories'].map((story)=>
+                axios.get(`${HN_API}/${story}.json?orderBy="$key"`).then(res => Object.values(JSON.parse(JSON.stringify(res.data))))
+            );
+
+            let postIds  = await Promise.all(getPosts);
+            
+            console.log(postIds);
+            
+
+            if(postIds.length){
+
+
+                response.data = postIds.flat();
+               /* const stories = posts.map((id) =>
+                        axios.get(`${HN_API}/item/${id}.json`)
+                );
+                const storyItems = await Promise.all(stories);
+                
+                if(storyItems.length){
+                    storyItems.map((item) => {
+                        debug(JSON.parse(JSON.stringify(item.data.title)));
+                        words = curateWords(words,JSON.parse(JSON.stringify(item.data.title)));
+                    });
+                    wordCountDictionary = countWords(wordCountDictionary,words);
+                    response.data = topWords(wordCountDictionary, query.wordCount);
+                }*/
+            }
+
+            ctx.status = 200;
+            ctx.body = response
+            
+    }catch(ex){
+        let error = new CustomError({
+            type: ex.type || ACTION,message: ex.stack,error_code: ex.error_code || '5501',status: ex.status,user_message: ex.user_message || ex.message
+        });
+        ctx.body = error
+        ctx.status = error.status;
+        return ctx.throw(error);
+    }
+}
+
+
 function curateWords(words,title) {
     //title = title.split(" ");
     title = title.split(/\W+/);
