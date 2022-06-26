@@ -27,8 +27,9 @@ npm start
 npm run start-dev
 ```
 
-### APIs
-#### 1. Top 10 most occurring words in the titles of the last 25 stories
+## Finished APIs
+*Note:* Link to the [postman collection for the Hacker News App](postman_collection.json)
+### 1. Top 10 most occurring words in the titles of the last 25 stories
 Endpoint:
 ```
 GET http://localhost:6500/words/occurrences
@@ -57,7 +58,7 @@ GET http://localhost:6500/words/occurrences
 GET http://localhost:6500/words/occurrences?topWordsCount=5&lastStoryCount=50
 ```
 
-#### 2. Top 10 most occurring words in the titles of posts of exactly last week
+### 2. Top 10 most occurring words in the titles of posts of exactly last week
 Endpoint:
 ```
 GET http://localhost:6500/words/occurrences/last-week
@@ -86,7 +87,7 @@ GET http://localhost:6500/words/occurrences/last-week
 GET http://localhost:6500/words/occurrences?topWordsCount=5
 ```
 
-#### 3. Top 10 most occurring words from last 600 stories of users with karma above 600
+### 3. Top 10 most occurring words from last 600 stories of users with karma above 600
 Endpoint:
 ```
 GET http://localhost:6500/words/occurrences/users

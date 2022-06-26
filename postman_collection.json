@@ -1,0 +1,287 @@
+{
+	"info": {
+		"_postman_id": "34468151-d437-4f8f-9dd3-80993b9d7c0f",
+		"name": "Hacker News App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "101821"
+	},
+	"item": [
+		{
+			"name": "Top Words from Last Stories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:6500/words/occurrences",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6500",
+					"path": [
+						"words",
+						"occurrences"
+					],
+					"query": [
+						{
+							"key": "lastStoryCount",
+							"value": "25",
+							"disabled": true
+						},
+						{
+							"key": "topWordsCount",
+							"value": "10",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200: Top Words from Last Stories",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6500/words/occurrences",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6500",
+							"path": [
+								"words",
+								"occurrences"
+							],
+							"query": [
+								{
+									"key": "lastStoryCount",
+									"value": "25",
+									"disabled": true
+								},
+								{
+									"key": "topWordsCount",
+									"value": "10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "130"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 26 Jun 2022 21:22:34 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": {\n        \"to\": 6,\n        \"the\": 5,\n        \"s\": 4,\n        \"hn\": 4,\n        \"for\": 3,\n        \"of\": 3,\n        \"on\": 3,\n        \"in\": 3,\n        \"and\": 2,\n        \"it\": 2\n    },\n    \"title\": \"Top 10 words from the last 25 stories\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Top Words from Last Week Posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:6500/words/occurrences/last-week",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6500",
+					"path": [
+						"words",
+						"occurrences",
+						"last-week"
+					],
+					"query": [
+						{
+							"key": "topWordsCount",
+							"value": "10",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200: Top Words from Last Week Posts",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6500/words/occurrences/last-week",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6500",
+							"path": [
+								"words",
+								"occurrences",
+								"last-week"
+							],
+							"query": [
+								{
+									"key": "topWordsCount",
+									"value": "10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "175"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 26 Jun 2022 21:05:51 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": {\n        \"the\": 243,\n        \"hn\": 169,\n        \"to\": 168,\n        \"of\": 166,\n        \"a\": 165,\n        \"in\": 117,\n        \"for\": 114,\n        \"ask\": 110,\n        \"and\": 98,\n        \"is\": 94\n    },\n    \"title\": \"Top 10 words from posts of last week (2022-06-20 to 2022-06-26)\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Top Words from Last Stories by Users of min. Karma",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:6500/words/occurrences/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6500",
+					"path": [
+						"words",
+						"occurrences",
+						"users"
+					],
+					"query": [
+						{
+							"key": "topWordsCount",
+							"value": "10",
+							"disabled": true
+						},
+						{
+							"key": "minUserKarma",
+							"value": "5000",
+							"disabled": true
+						},
+						{
+							"key": "lastStoryCount",
+							"value": "700",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200: Top Words from Last Stories by Users of min. Karma",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6500/words/occurrences/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6500",
+							"path": [
+								"words",
+								"occurrences",
+								"users"
+							],
+							"query": [
+								{
+									"key": "topWordsCount",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "minUserKarma",
+									"value": "5000",
+									"disabled": true
+								},
+								{
+									"key": "lastStoryCount",
+									"value": "700",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "175"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 26 Jun 2022 22:38:33 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": {\n        \"the\": 51,\n        \"a\": 27,\n        \"of\": 26,\n        \"to\": 22,\n        \"s\": 22,\n        \"in\": 20,\n        \"and\": 20,\n        \"is\": 17,\n        \"for\": 16,\n        \"on\": 11\n    },\n    \"title\": \"Top 10 words from last 600 stories of 170 users with at least 10000 karma\"\n}"
+				}
+			]
+		}
+	]
+}
