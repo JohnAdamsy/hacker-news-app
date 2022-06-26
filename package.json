@@ -1,6 +1,6 @@
 {
   "name": "hacker-news-app",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Node app (based on Koajs) that consumes the Hacker News API and does some cool things on the side",
   "main": "app.js",
   "scripts": {
@@ -50,6 +50,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "fetch": "^1.1.0",
+    "joi": "^17.6.0",
     "koa": "^2.13.4",
     "koa-body": "^5.0.0",
     "koa-logger": "^3.2.1",

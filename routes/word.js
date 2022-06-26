@@ -6,6 +6,6 @@ const Router  = require('koa-router');
 const wordController  = require('../controllers/word');
 var router  = Router();
 
-router.get('/top-10',wordController.topTenWordsOccurringFromLastTwentyFiveStories); 
+router.get('/occurrences',wordController.topWordsOccurringFromLastStories); 
 
 module.exports = router;
