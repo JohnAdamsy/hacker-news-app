@@ -86,6 +86,35 @@ GET http://localhost:6500/words/occurrences/last-week
 GET http://localhost:6500/words/occurrences?topWordsCount=5
 ```
 
+#### 3. Top 10 most occurring words from last 600 stories of users with karma above 600
+Endpoint:
+```
+GET http://localhost:6500/words/occurrences/users
+```
+#### Sample Response
+```json
+{
+    "data": {
+        "the": 51,
+        "a": 27,
+        "of": 26,
+        "to": 22,
+        "s": 22,
+        "in": 20,
+        "and": 20,
+        "is": 17,
+        "for": 16,
+        "on": 11
+    },
+    "title": "Top 10 words from last 600 stories of 170 users with at least 10000 karma"
+}
+```
+
+> Also supports optional request params: topWordsCount,minUserKarma,lastStoryCount
+```
+GET http://localhost:6500/words/occurrences/users?topWordsCount=10&minUserKarma=5000&lastStoryCount=700
+```
+
 
 ### Challenges / Workarounds
 1. **Task 2:** The Hacker News API for recent stories **/newstories** returns **null** when filtering with the range startAt and endAt. As a worker around, decided to fetch all stories (best, top, new, ask, show, job) get details, remove duplicate stories and filter by the time it was created. 
