@@ -57,9 +57,40 @@ GET http://localhost:6500/words/occurrences
 GET http://localhost:6500/words/occurrences?topWordsCount=5&lastStoryCount=50
 ```
 
-### Challenges
-1. Task 2: The Hacker News API for recent stories **/newstories** returns **null** when filtering with the range startAt and endAt. As a worker around, decided to fetch all stories (best, top, new, ask, show, job) get details and filter by the time it was created. 
-2. Task 3: The Hacker News API has a limit of 500 items per result. As a worker around, decided to fetch all stories (best, top, new, ask, show, job) sort the index in reverse order and pick the first 600 then process from there. 
+#### 2. Top 10 most occurring words in the titles of posts of exactly last week
+Endpoint:
+```
+GET http://localhost:6500/words/occurrences/last-week
+```
+#### Sample Response
+```json
+{
+    "data": {
+        "the": 242,
+        "hn": 168,
+        "of": 166,
+        "to": 165,
+        "a": 165,
+        "in": 116,
+        "for": 113,
+        "ask": 109,
+        "and": 97,
+        "is": 94
+    },
+    "title": "Top 10 words from posts of last week (2022-06-20 to 2022-06-26)"
+}
+```
+
+> Also supports optional request params: topWordsCount
+```
+GET http://localhost:6500/words/occurrences?topWordsCount=5
+```
+
+
+### Challenges / Workarounds
+1. **Task 2:** The Hacker News API for recent stories **/newstories** returns **null** when filtering with the range startAt and endAt. As a worker around, decided to fetch all stories (best, top, new, ask, show, job) get details, remove duplicate stories and filter by the time it was created. 
+2. **Task 3:** The Hacker News API has a limit of 500 items per result. As a worker around, decided to fetch all stories (best, top, new, ask, show, job), remove duplicate storires,  sort the index in reverse order and pick the first 600 then process only by users with a karma of above 10,000.
+3. **General**: As words can be in both lower case and uppercase, to avoid miscounting, converted all words into lowercase. Ignoring whitespaces, digits and other "funny" characters.
 
 ## To Do
 1. Add Tests
