@@ -12,10 +12,9 @@ This is a Node Server side app that consumes the Hacker News API to do some basi
 git clone git@github.com:JohnAdamsy/hacker-news-app.git
 ```
 
-2. Go into the route directory and install dependencies
+2. Go into the root directory and install dependencies
 ```bash
-cd hacker-news-app
-npm install
+cd hacker-news-app && npm install
 ```
 
 3. Start the App
