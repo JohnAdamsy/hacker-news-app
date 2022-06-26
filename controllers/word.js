@@ -5,6 +5,7 @@ const { off } = require('superagent');
 const HN_API = require('../config').HACKER_NEWS_API;
 const debug = require('debug')('api:app:words');
 const Joi = require('joi');
+const {DateTime} = require('luxon');
 
 /**
  * Returns the top {number} words occurring in the titles of Hacker News' last {specified} stories. 
@@ -93,6 +94,9 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
                 wordCount: ctx.query.topWordsCount || 10
             }
 
+            const startOfLastWeek = DateTime.now().startOf('week').minus({'week': 1});
+            const endOfLastWeek = DateTime.now().endOf('week').minus({'week': 1});
+
             const requestParamSchema = Joi.object({
                 wordCount: Joi.number().min(1).optional(),
             });
@@ -109,33 +113,31 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
 
             let words = [];
             let wordCountDictionary = {};
-            let response = {data: null};
+            let response = {data: null,title: `Top ${query.wordCount} words from posts of last week (${startOfLastWeek.toISODate()} to ${endOfLastWeek.toISODate()})`};
             const getPosts =  ['newstories','beststories','topstories','askstories','showstories','jobstories'].map((story)=>
                 axios.get(`${HN_API}/${story}.json?orderBy="$key"`).then(res => Object.values(JSON.parse(JSON.stringify(res.data))))
             );
-
             let postIds  = await Promise.all(getPosts);
             
-            console.log(postIds);
-            
-
             if(postIds.length){
-
-
-                response.data = postIds.flat();
-               /* const stories = posts.map((id) =>
-                        axios.get(`${HN_API}/item/${id}.json`)
+                postIds = Array.from(new Set(postIds.flat())); //merge and remove duplicate ids
+                const stories = postIds.map((id) =>
+                        axios.get(`${HN_API}/item/${id}.json`).then(res =>JSON.parse(JSON.stringify(res.data)))
                 );
                 const storyItems = await Promise.all(stories);
                 
                 if(storyItems.length){
-                    storyItems.map((item) => {
-                        debug(JSON.parse(JSON.stringify(item.data.title)));
-                        words = curateWords(words,JSON.parse(JSON.stringify(item.data.title)));
+                    storyItems.map((item,x) => {
+                        item.time = DateTime.fromSeconds(item.time);
+                        if(item.time >= startOfLastWeek && item.time <= endOfLastWeek ){
+                            debug(x, item.time.toISO());
+                            words = curateWords(words,item.title);
+                        }
+                        
                     });
                     wordCountDictionary = countWords(wordCountDictionary,words);
                     response.data = topWords(wordCountDictionary, query.wordCount);
-                }*/
+                }
             }
 
             ctx.status = 200;
@@ -163,7 +165,7 @@ function curateWords(words,title) {
 
   function countWords(wordCounter, dictionary){
     for(let word of dictionary){
-        if(!/\d+/.test(word) && word !== null){
+        if(!/\d+/.test(word) && word !== null && word.length){
             if(wordCounter[word] === undefined){
                 wordCounter[word] = 1;
             }else{
