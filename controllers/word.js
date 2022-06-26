@@ -21,7 +21,6 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
     const ACTION = `VIEW_TOP_WORDS_FROM_LAST_STORIES`;
 
     try{
-            
             let query = {
                 storyCount: ctx.query.lastStoryCount || 25,
                 wordCount: ctx.query.topWordsCount || 10
@@ -44,46 +43,36 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
 
             let words = [];
             let wordCountDictionary = {};
-
+            let response = {data: null};
             let storyItemIds =  await axios.get(`${HN_API}/newstories.json?limitToLast=${query.storyCount}&orderBy="$key"`).then(res => Object.values(JSON.parse(JSON.stringify(res.data))));
-            
 
-            debug(storyItemIds);
-
-            const stories = storyItemIds.map((id) =>
-                    axios.get(`${HN_API}/item/${id}.json`)
-            );
-
-            const storyItems = await Promise.all(stories);
-            
-            storyItems.map((item) => {
-                debug(JSON.parse(JSON.stringify(item.data.title)));
-                words = curateWords(words,JSON.parse(JSON.stringify(item.data.title)))
-              });
-       
-            wordCountDictionary = countWords(wordCountDictionary,words)
-            
+            if(storyItemIds.length){
+                const stories = storyItemIds.map((id) =>
+                        axios.get(`${HN_API}/item/${id}.json`)
+                );
+                const storyItems = await Promise.all(stories);
+                
+                if(storyItems.length){
+                    storyItems.map((item) => {
+                        debug(JSON.parse(JSON.stringify(item.data.title)));
+                        words = curateWords(words,JSON.parse(JSON.stringify(item.data.title)));
+                    });
+                    wordCountDictionary = countWords(wordCountDictionary,words);
+                    response.data = topWords(wordCountDictionary, query.wordCount);
+                }
+            }
 
             ctx.status = 200;
-            ctx.body = {data: topWords(wordCountDictionary, query.wordCount)};
-        
-
+            ctx.body = response
+            
     }catch(ex){
         let error = new CustomError({
-            type: ex.type || ACTION,
-            message: ex.stack,
-            error_code: ex.error_code || '5501',
-            status: ex.status,
-            user_message: ex.user_message || ex.message
+            type: ex.type || ACTION,message: ex.stack,error_code: ex.error_code || '5501',status: ex.status,user_message: ex.user_message || ex.message
         });
-
-
         ctx.body = error
         ctx.status = error.status;
-
         return ctx.throw(error);
     }
-
 }
 
 function curateWords(words,title) {
@@ -104,7 +93,6 @@ function curateWords(words,title) {
                 wordCounter[word] += 1;
             }
         }
-        
     }
     return wordCounter;
   }
