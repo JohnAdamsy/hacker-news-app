@@ -81,7 +81,7 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
  *  Has optional request query params: 
  *  1. topWordsCount - number of top most occurring words words. Default is 10
  *
- * @desc Returns the top {number} words occurring in the titles of Hacker News' title from posts made exactly last week.
+ * @desc Returns the top {number} words occurring in the titles of Hacker News' from posts made exactly last week.
  *
  * @param {*} ctx
  * @param {*} next
@@ -138,6 +138,90 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
                     wordCountDictionary = countWords(wordCountDictionary,words);
                     response.data = topWords(wordCountDictionary, query.wordCount);
                 }
+            }
+
+            ctx.status = 200;
+            ctx.body = response
+            
+    }catch(ex){
+        let error = new CustomError({
+            type: ex.type || ACTION,message: ex.stack,error_code: ex.error_code || '5501',status: ex.status,user_message: ex.user_message || ex.message
+        });
+        ctx.body = error
+        ctx.status = error.status;
+        return ctx.throw(error);
+    }
+}
+
+/**
+ * Returns the top {number} words occurring in the titles of the last 600 stories of users with atleast 10,000 karma
+ *  Has optional request query params: 
+ *  1. topWordsCount - number of top most occurring words words. Default is 10
+ *  2. userKarma - user's karma value. Default is 10,000
+ *  3. lastStoryCount - number of stories to be retrieved from HN API. Default is 600
+ *
+ * @desc Returns the top {number} words occurring in the titles the last 600 stories of users with at least 10,000 karma.
+ *
+ * @param {*} ctx
+ * @param {*} next
+ */
+ exports.topWordsOccurringFromLastStoriesByUsersWithMinimumKarma = async function topWordsOccurringFromLastStoriesByUsersWithMinimumKarma(ctx, next) {
+    const ACTION = `VIEW_TOP_WORDS_FROM_LAST_STORIES_BY_USER_WITH_MINIMUM_KARMA`;
+
+    try{
+            let query = {
+                wordCount: ctx.query.topWordsCount || 10,
+                userKarma: ctx.query.minUserKarma || 10000,
+                storyCount: ctx.query.lastStoryCount || 600
+            }
+
+            const startOfLastWeek = DateTime.now().startOf('week').minus({'week': 1});
+            const endOfLastWeek = DateTime.now().endOf('week').minus({'week': 1});
+
+            const requestParamSchema = Joi.object({
+                wordCount: Joi.number().min(1).optional(),
+                userKarma: Joi.number().min(1).optional(),
+                storyCount: Joi.number().min(1).optional()
+            });
+
+            await requestParamSchema.validateAsync(query, { warnings: true })
+            .then(validated => {
+                query = validated.value;
+                return true
+            }).catch(err => {
+                err.type = ACTION;
+                err.status = 400;
+                throw (err);
+            });
+
+            let words = [];
+            let wordCountDictionary = {};
+            let response = {data: null,title: `Top ${query.wordCount} words from last ${query.storyCount} stories of users with at least ${query.userKarma} karma`};
+            const getPosts =  ['newstories','beststories','topstories','askstories','showstories','jobstories'].map((story)=>
+                axios.get(`${HN_API}/${story}.json?orderBy="$key"`).then(res => Object.values(JSON.parse(JSON.stringify(res.data))))
+            );
+            let postIds  = await Promise.all(getPosts);
+            
+            if(postIds.length){
+                postIds = Array.from(new Set(postIds.flat())).sort((a,b)=> b - a); //merge, remove duplicate ids and reverse sort
+                response.data = postIds;
+                /*const stories = postIds.map((id) =>
+                        axios.get(`${HN_API}/item/${id}.json`).then(res =>JSON.parse(JSON.stringify(res.data)))
+                );
+                const storyItems = await Promise.all(stories);
+                
+                if(storyItems.length){
+                    storyItems.map((item,x) => {
+                        item.time = DateTime.fromSeconds(item.time);
+                        if(item.time >= startOfLastWeek && item.time <= endOfLastWeek ){
+                            debug(x, item.time.toISO());
+                            words = curateWords(words,item.title);
+                        }
+                        
+                    });
+                    wordCountDictionary = countWords(wordCountDictionary,words);
+                    response.data = topWords(wordCountDictionary, query.wordCount);
+                }*/
             }
 
             ctx.status = 200;

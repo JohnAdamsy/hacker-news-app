@@ -8,6 +8,6 @@ var router  = Router();
 
 router.get('/occurrences',wordController.topWordsOccurringFromLastStories); 
 router.get('/occurrences/last-week',wordController.topWordsOccurringFromLastStoriesOfLastWeek);
-//router.get('/occurrences/top-users',null);
+router.get('/occurrences/users',wordController.topWordsOccurringFromLastStoriesByUsersWithMinimumKarma);
 
 module.exports = router;
