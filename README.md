@@ -31,9 +31,8 @@ npm run start-dev
 1. Top 10 most occurring words in the titles of the last 25 stories
 Endpoint
 ```
-GET http://localhost:6500/words/top-10
+GET http://localhost:6500/words/occurrences
 ```
-
 #### Sample Response
 ```json
 {
@@ -50,6 +49,11 @@ GET http://localhost:6500/words/top-10
         "how": 3
     }
 }
+```
+
+> Also supports optional request params: topWordsCount, lastStoryCount
+```
+GET http://localhost:6500/words/occurrences?topWordsCount=5&lastStoryCount=50
 ```
 
 ## To Do
