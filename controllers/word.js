@@ -130,7 +130,6 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
                     storyItems.map((item,x) => {
                         item.time = DateTime.fromSeconds(item.time);
                         if(item.time >= startOfLastWeek && item.time <= endOfLastWeek ){
-                            debug(x, item.time.toISO());
                             words = curateWords(words,item.title);
                         }
                         
@@ -196,32 +195,47 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
 
             let words = [];
             let wordCountDictionary = {};
-            let response = {data: null,title: `Top ${query.wordCount} words from last ${query.storyCount} stories of users with at least ${query.userKarma} karma`};
+            let response = {data: null,title: `Top ${query.wordCount} words from last ${query.storyCount} stories of {{COUNT}} users with at least ${query.userKarma} karma`};
             const getPosts =  ['newstories','beststories','topstories','askstories','showstories','jobstories'].map((story)=>
                 axios.get(`${HN_API}/${story}.json?orderBy="$key"`).then(res => Object.values(JSON.parse(JSON.stringify(res.data))))
             );
             let postIds  = await Promise.all(getPosts);
             
             if(postIds.length){
-                postIds = Array.from(new Set(postIds.flat())).sort((a,b)=> b - a); //merge, remove duplicate ids and reverse sort
-                response.data = postIds;
-                /*const stories = postIds.map((id) =>
-                        axios.get(`${HN_API}/item/${id}.json`).then(res =>JSON.parse(JSON.stringify(res.data)))
+                postIds = Array.from(new Set(postIds.flat())).sort((a,b)=> b - a).slice(0,query.storyCount); //merge, remove duplicate ids, reverse sort and slice
+                const getStory = postIds.map((id) =>
+                        axios.get(`${HN_API}/item/${id}.json`)
+                        .then(res =>JSON.parse(JSON.stringify(res.data)))
+                        /*.then(item => axios.get(`${HN_API}/user/${item.by}.json`)
+                        .then(res =>JSON.parse(JSON.stringify(res.data))))*/
                 );
-                const storyItems = await Promise.all(stories);
+                const stories = await Promise.all(getStory);
+
+                const getUser = stories.map((item) =>
+                        axios.get(`${HN_API}/user/${item.by}.json`).then(res =>{ 
+                            res = JSON.parse(JSON.stringify(res.data)); 
+                            if(res.karma >= query.userKarma){
+                                res.story = item; 
+                                return res;
+                            }else return;
+                        })
+                );
+
+                const userStories = await Promise.all(getUser);
                 
-                if(storyItems.length){
-                    storyItems.map((item,x) => {
-                        item.time = DateTime.fromSeconds(item.time);
-                        if(item.time >= startOfLastWeek && item.time <= endOfLastWeek ){
-                            debug(x, item.time.toISO());
-                            words = curateWords(words,item.title);
+                if(userStories.length){
+                    let userCount = 0;
+                    userStories.map((item) => {
+                        if(item){
+                            userCount += 1;
+                            words = curateWords(words,item.story.title);
                         }
                         
                     });
                     wordCountDictionary = countWords(wordCountDictionary,words);
                     response.data = topWords(wordCountDictionary, query.wordCount);
-                }*/
+                    response.title = response.title.replace('{{COUNT}}',userCount);
+                }
             }
 
             ctx.status = 200;
