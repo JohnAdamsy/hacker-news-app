@@ -44,7 +44,7 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
 
             let words = [];
             let wordCountDictionary = {};
-            let response = {data: null};
+            let response = {data: null,title: `Top ${query.wordCount} words from the last ${query.storyCount} stories`};
             let storyItemIds =  await axios.get(`${HN_API}/newstories.json?limitToLast=${query.storyCount}&orderBy="$key"`).then(res => Object.values(JSON.parse(JSON.stringify(res.data))));
 
             if(storyItemIds.length){
