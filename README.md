@@ -27,6 +27,13 @@ npm start
 npm run start-dev
 ```
 
+## Running Tests
+> Tests are implemented with Jest.
+**Note:** Close the app  first, if you had been running it before to avoid getting the error _"Port 6500 is already in use"_
+```bash
+npm test
+```
+
 ## Finished APIs
 *Note:* Link to the [postman collection for the Hacker News App](postman_collection.json)
 ### 1. Top 10 most occurring words in the titles of the last 25 stories
@@ -126,9 +133,8 @@ GET http://localhost:6500/words/occurrences/users?topWordsCount=10&minUserKarma=
 3. **General**: As words can be in both lower case and uppercase, to avoid miscounting, converted all words into lowercase. Ignoring whitespaces, digits and other "funny" characters.
 
 ## To Do
-1. Add Tests
-2. Docker support
-3. CI/CD Pipeline Configs
+1. Docker support
+2. CI/CD Pipeline Configs
 
 ## Hacker News API
 1. Retrieving last N stories 

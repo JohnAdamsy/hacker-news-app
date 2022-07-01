@@ -44,4 +44,4 @@ server.on('error', utils.onError(PORT));
 server.on(`listening`, utils.onListening(server, PORT));
 
 
-module.exports = app;
+module.exports = {app,server};
