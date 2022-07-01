@@ -94,8 +94,8 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
                 wordCount: ctx.query.topWordsCount || 10
             }
 
-            const startOfLastWeek = DateTime.now().startOf('week').minus({'week': 1});
-            const endOfLastWeek = DateTime.now().endOf('week').minus({'week': 1});
+            const startOfLastWeek = DateTime.now().startOf('week').minus({'week': 1}).toUTC();
+            const endOfLastWeek = DateTime.now().endOf('week').minus({'week': 1}).toUTC();
 
             const requestParamSchema = Joi.object({
                 wordCount: Joi.number().min(1).optional(),
@@ -113,9 +113,9 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
 
             let words = [];
             let wordCountDictionary = {};
-            let response = {data: null,title: `Top ${query.wordCount} words from posts of last week (${startOfLastWeek.toISODate()} to ${endOfLastWeek.toISODate()})`};
+            let response = {data: null,title: `Top ${query.wordCount} words from posts of last week (${startOfLastWeek.toISODate()} to ${endOfLastWeek.toISODate()})`, posts: 0};
             const getPosts =  ['newstories','beststories','topstories','askstories','showstories','jobstories'].map((story)=>
-                axios.get(`${HN_API}/${story}.json?orderBy="$key"`).then(res => Object.values(JSON.parse(JSON.stringify(res.data))))
+                axios.get(`${HN_API}/${story}.json?orderBy="$priority"`).then(res => Object.values(JSON.parse(JSON.stringify(res.data))))
             );
             let postIds  = await Promise.all(getPosts);
             
@@ -127,14 +127,15 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
                 const storyItems = await Promise.all(stories);
                 
                 if(storyItems.length){
-                    storyItems.map((item,x) => {
-                        item.time = DateTime.fromSeconds(item.time);
+                    storyItems.map((item) => {
+                        item.time = DateTime.fromSeconds(item.time).toUTC();
                         if(item.time >= startOfLastWeek && item.time <= endOfLastWeek ){
                             words = curateWords(words,item.title);
                         }
                         
                     });
                     wordCountDictionary = countWords(wordCountDictionary,words);
+                    response.posts = storyItems.length;
                     response.data = topWords(wordCountDictionary, query.wordCount);
                 }
             }
@@ -174,9 +175,6 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
                 storyCount: ctx.query.lastStoryCount || 600
             }
 
-            const startOfLastWeek = DateTime.now().startOf('week').minus({'week': 1});
-            const endOfLastWeek = DateTime.now().endOf('week').minus({'week': 1});
-
             const requestParamSchema = Joi.object({
                 wordCount: Joi.number().min(1).optional(),
                 userKarma: Joi.number().min(1).optional(),
@@ -195,13 +193,16 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
 
             let words = [];
             let wordCountDictionary = {};
-            let response = {data: null,title: `Top ${query.wordCount} words from last ${query.storyCount} stories of {{COUNT}} users with at least ${query.userKarma} karma`};
+            let response = {data: null,title: `Top ${query.wordCount} words from last ${query.storyCount} stories of users with at least ${query.userKarma} karma`, users: 0 , posts: 0};
             const getPosts =  ['newstories','beststories','topstories','askstories','showstories','jobstories'].map((story)=>
                 axios.get(`${HN_API}/${story}.json?orderBy="$key"`).then(res => Object.values(JSON.parse(JSON.stringify(res.data))))
             );
             let postIds  = await Promise.all(getPosts);
+            let uniquePostsCount = 0;
+            let uniqueUserIds = [];
             
             if(postIds.length){
+                uniquePostsCount = Array.from(new Set(postIds.flat())).length;
                 postIds = Array.from(new Set(postIds.flat())).sort((a,b)=> b - a).slice(0,query.storyCount); //merge, remove duplicate ids, reverse sort and slice
                 const getStory = postIds.map((id) =>
                         axios.get(`${HN_API}/item/${id}.json`)
@@ -215,7 +216,9 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
                         axios.get(`${HN_API}/user/${item.by}.json`).then(res =>{ 
                             res = JSON.parse(JSON.stringify(res.data)); 
                             if(res.karma >= query.userKarma){
-                                res.story = item; 
+                                res.story = item;
+                                //let usersSet =  new Set(uniqueUserIds);
+                                if(!uniqueUserIds.includes(item.by)) {uniqueUserIds.push(item.by)}
                                 return res;
                             }else return;
                         })
@@ -234,7 +237,8 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
                     });
                     wordCountDictionary = countWords(wordCountDictionary,words);
                     response.data = topWords(wordCountDictionary, query.wordCount);
-                    response.title = response.title.replace('{{COUNT}}',userCount);
+                    response.users = uniqueUserIds.length;
+                    response.posts = uniquePostsCount;
                 }
             }
 
