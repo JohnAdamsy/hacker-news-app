@@ -217,7 +217,6 @@ exports.topWordsOccurringFromLastStories = async function topWordsOccurringFromL
                             res = JSON.parse(JSON.stringify(res.data)); 
                             if(res.karma >= query.userKarma){
                                 res.story = item;
-                                //let usersSet =  new Set(uniqueUserIds);
                                 if(!uniqueUserIds.includes(item.by)) {uniqueUserIds.push(item.by)}
                                 return res;
                             }else return;
