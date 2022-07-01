@@ -67,18 +67,19 @@ GET http://localhost:6500/words/occurrences/last-week
 ```json
 {
     "data": {
-        "the": 242,
-        "hn": 168,
-        "of": 166,
-        "to": 165,
-        "a": 165,
-        "in": 116,
-        "for": 113,
-        "ask": 109,
-        "and": 97,
-        "is": 94
+        "hn": 40,
+        "a": 39,
+        "the": 36,
+        "to": 36,
+        "is": 32,
+        "of": 25,
+        "in": 20,
+        "for": 20,
+        "ask": 18,
+        "and": 17
     },
-    "title": "Top 10 words from posts of last week (2022-06-20 to 2022-06-26)"
+    "title": "Top 10 words from posts of last week (2022-06-19 to 2022-06-26)",
+    "posts": 1147
 }
 ```
 
@@ -96,18 +97,20 @@ GET http://localhost:6500/words/occurrences/users
 ```json
 {
     "data": {
-        "the": 51,
+        "the": 37,
+        "to": 37,
         "a": 27,
-        "of": 26,
-        "to": 22,
-        "s": 22,
-        "in": 20,
+        "for": 21,
+        "in": 21,
         "and": 20,
-        "is": 17,
-        "for": 16,
-        "on": 11
+        "of": 14,
+        "s": 13,
+        "from": 11,
+        "on": 10
     },
-    "title": "Top 10 words from last 600 stories of 170 users with at least 10000 karma"
+    "title": "Top 10 words from last 600 stories of users with at least 10000 karma",
+    "users": 85,
+    "posts": 1022
 }
 ```
 
