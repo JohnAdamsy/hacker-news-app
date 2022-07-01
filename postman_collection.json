@@ -160,11 +160,11 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "175"
+							"value": "180"
 						},
 						{
 							"key": "Date",
-							"value": "Sun, 26 Jun 2022 21:05:51 GMT"
+							"value": "Thu, 30 Jun 2022 18:10:32 GMT"
 						},
 						{
 							"key": "Connection",
@@ -176,7 +176,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"data\": {\n        \"the\": 243,\n        \"hn\": 169,\n        \"to\": 168,\n        \"of\": 166,\n        \"a\": 165,\n        \"in\": 117,\n        \"for\": 114,\n        \"ask\": 110,\n        \"and\": 98,\n        \"is\": 94\n    },\n    \"title\": \"Top 10 words from posts of last week (2022-06-20 to 2022-06-26)\"\n}"
+					"body": "{\n    \"data\": {\n        \"hn\": 40,\n        \"a\": 39,\n        \"the\": 36,\n        \"to\": 36,\n        \"is\": 32,\n        \"of\": 25,\n        \"in\": 20,\n        \"for\": 20,\n        \"ask\": 18,\n        \"and\": 17\n    },\n    \"title\": \"Top 10 words from posts of last week (2022-06-19 to 2022-06-26)\",\n    \"posts\": 1147\n}"
 				}
 			]
 		},
@@ -217,6 +217,70 @@
 				}
 			},
 			"response": [
+				{
+					"name": "500: Top Words from Last Stories by Users of min. Karma",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6500/words/occurrences/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6500",
+							"path": [
+								"words",
+								"occurrences",
+								"users"
+							],
+							"query": [
+								{
+									"key": "topWordsCount",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "minUserKarma",
+									"value": "5000",
+									"disabled": true
+								},
+								{
+									"key": "lastStoryCount",
+									"value": "700",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "243"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 01 Jul 2022 02:10:27 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 500,\n    \"message\": \"Error: read ECONNRESET\\n    at TLSWrap.onStreamRead (node:internal/stream_base_commons:217:20)\",\n    \"error_code\": \"5501\",\n    \"user_message\": \"read ECONNRESET\",\n    \"type\": \"VIEW_TOP_WORDS_FROM_LAST_STORIES_BY_USER_WITH_MINIMUM_KARMA\"\n}"
+				},
 				{
 					"name": "200: Top Words from Last Stories by Users of min. Karma",
 					"originalRequest": {
@@ -263,11 +327,11 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "175"
+							"value": "197"
 						},
 						{
 							"key": "Date",
-							"value": "Sun, 26 Jun 2022 22:38:33 GMT"
+							"value": "Fri, 01 Jul 2022 02:11:16 GMT"
 						},
 						{
 							"key": "Connection",
@@ -279,7 +343,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"data\": {\n        \"the\": 51,\n        \"a\": 27,\n        \"of\": 26,\n        \"to\": 22,\n        \"s\": 22,\n        \"in\": 20,\n        \"and\": 20,\n        \"is\": 17,\n        \"for\": 16,\n        \"on\": 11\n    },\n    \"title\": \"Top 10 words from last 600 stories of 170 users with at least 10000 karma\"\n}"
+					"body": "{\n    \"data\": {\n        \"the\": 37,\n        \"to\": 37,\n        \"a\": 27,\n        \"for\": 21,\n        \"in\": 21,\n        \"and\": 20,\n        \"of\": 14,\n        \"s\": 13,\n        \"from\": 11,\n        \"on\": 10\n    },\n    \"title\": \"Top 10 words from last 600 stories of users with at least 10000 karma\",\n    \"users\": 85,\n    \"posts\": 1022\n}"
 				}
 			]
 		}
